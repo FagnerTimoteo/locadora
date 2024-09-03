@@ -16,13 +16,22 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     public ClienteDTO save(ClienteDTO clienteDTO) {
+    	//Instancia um cliente com os valores passados para o dto
         Cliente cliente = new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail());
+        
+        //Salva esse cliente no banco de dados
         cliente = clienteRepository.save(cliente);
+        
+        //Retorna um dto com os exatos valores que estão com o cliente não dto
         return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getEmail());
     }
 
     public Optional<ClienteDTO> findById(Long id) {
+    	
+    	//Acha o cliente no Redis pela id
         Optional<Cliente> cliente = clienteRepository.findById(id);
+        
+        //Retorna um por meio de um dicionario um dto equivalente? 
         return cliente.map(c -> new ClienteDTO(c.getId(), c.getNome(), c.getEmail()));
     }
 

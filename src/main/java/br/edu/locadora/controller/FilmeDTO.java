@@ -1,15 +1,12 @@
-package br.edu.locadora.entity;
+package br.edu.locadora.controller;
 
-import org.springframework.data.redis.core.RedisHash;
-
-@RedisHash("Filme")
-public class Filme {
+public class FilmeDTO {
     private Long id;
 	private String titulo;
     private String genero;
     private boolean disponivel;
     
-    public Filme(Long id, String titulo, String genero, boolean disponivel) {
+    public FilmeDTO(Long id, String titulo, String genero, boolean disponivel) {
 		super();
 		this.id = id;
 		this.titulo = titulo;
