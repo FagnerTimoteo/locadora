@@ -1,20 +1,15 @@
-package br.edu.locadora.entity;
+package br.edu.locadora.DTO;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.redis.core.RedisHash;
+public class ClienteDTO {
 
-@RedisHash("Cliente")
-public class Cliente {
-
-    @Id
     private Long id;
     private String nome;
     private String email;
 
     // Construtores
-    public Cliente() {}
+    public ClienteDTO() {}
 
-    public Cliente(Long id, String nome, String email) {
+    public ClienteDTO(Long id, String nome, String email) {
         this.id = id;
         this.nome = nome;
         this.email = email;

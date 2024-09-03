@@ -2,8 +2,11 @@ package br.edu.locadora;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-@SpringBootApplication
+//Sem o (exclude = {DataSourceAutoConfiguration.class}) o servidor não abre
+
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 public class LocadoraApplication {
 
 	public static void main(String[] args) {
