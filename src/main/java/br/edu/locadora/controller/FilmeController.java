@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.locadora.DTO.ClienteDTO;
 import br.edu.locadora.DTO.FilmeDTO;
 import br.edu.locadora.service.FilmeService;
 
@@ -38,6 +40,19 @@ public class FilmeController {
     public ResponseEntity<FilmeDTO> findByTitulo(@PathVariable String titulo) {
         Optional<FilmeDTO> filmeDTO = filmeService.findByTitulo(titulo);
         return filmeDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<FilmeDTO> update(@PathVariable Long id, @RequestBody FilmeDTO filmeDTO){
+    	//Por ser um Optional, != null não funciona
+    	if (filmeService.findById(id).isPresent()) {
+    		filmeDTO.setId(id);
+    		FilmeDTO updatedFilme = filmeService.save(filmeDTO);
+    		
+    		return ResponseEntity.ok(updatedFilme);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
