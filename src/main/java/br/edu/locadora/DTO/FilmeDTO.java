@@ -1,11 +1,11 @@
-package br.edu.locadora.controller;
+package br.edu.locadora.DTO;
 
 public class FilmeDTO {
-    private Long id;
+	private Long id;
 	private String titulo;
     private String genero;
     private boolean disponivel;
-    
+	
     public FilmeDTO(Long id, String titulo, String genero, boolean disponivel) {
 		super();
 		this.id = id;
