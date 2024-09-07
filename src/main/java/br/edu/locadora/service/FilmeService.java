@@ -3,6 +3,7 @@ package br.edu.locadora.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import br.edu.locadora.DTO.FilmeDTO;
@@ -11,13 +12,24 @@ import br.edu.locadora.repository.FilmeRepository;
 
 @Service
 public class FilmeService {
+	
+	String teste;
 
 	@Autowired
     private FilmeRepository filmeRepository;
 
+	@Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+	
+    public Long generateId() {
+        return redisTemplate.opsForValue().increment("filme:id");
+    }
+	
     public FilmeDTO save(FilmeDTO filmeDTO) {
+    	Long id = generateId();
+        
         Filme filme = new Filme(
-        		filmeDTO.getId(), filmeDTO.getTitulo(), filmeDTO.getGenero(), filmeDTO.isDisponivel());
+        		id, filmeDTO.getTitulo(), filmeDTO.getGenero(), filmeDTO.isDisponivel());
         
         filme = filmeRepository.save(filme);
         
@@ -31,9 +43,14 @@ public class FilmeService {
     }
 
     public Optional<FilmeDTO> findByTitulo(String titulo) {
-        Optional<Filme> cliente = filmeRepository.findByTitulo(titulo);
-        return cliente.map(f -> new FilmeDTO(f.getId(), f.getTitulo(), f.getGenero(), f.isDisponivel()));
+        titulo = titulo.trim(); // Remove espaços em branco no início e no fim
+        Optional<Filme> filme = filmeRepository.findByTitulo(titulo);
+        
+        System.out.println("Título pesquisado: " + titulo);
+        
+        return filme.map(f -> new FilmeDTO(f.getId(), f.getTitulo(), f.getGenero(), f.isDisponivel()));
     }
+
 
     public void deleteById(Long id) {
     	filmeRepository.deleteById(id);

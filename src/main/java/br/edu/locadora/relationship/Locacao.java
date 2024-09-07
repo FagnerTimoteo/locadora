@@ -8,16 +8,24 @@ import org.springframework.data.redis.core.RedisHash;
 @RedisHash("Locacao")
 public class Locacao {
 
-    @Id
+	@Id
     private Long id;
     private Long clienteId;
     private Long filmeId;
     private LocalDate dataLocacao;
     private LocalDate dataDevolucao;
     private Double valor;
+    
+    public Locacao(Long id, Long clienteId, Long filmeId, LocalDate dataLocacao, LocalDate dataDevolucao, Double valor) {
+    	this.id = id;
+        this.clienteId = clienteId;
+        this.filmeId = filmeId;
+        this.dataLocacao = dataLocacao;
+        this.dataDevolucao = dataDevolucao;
+        this.valor = valor;
+	}
 
-    // Getters e Setters
-
+	// Getters e Setters
     public Long getId() {
         return id;
     }

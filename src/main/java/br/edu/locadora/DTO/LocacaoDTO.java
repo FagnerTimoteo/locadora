@@ -3,7 +3,6 @@ package br.edu.locadora.DTO;
 import java.time.LocalDate;
 
 public class LocacaoDTO {
-
     private Long id;
     private Long clienteId;
     private Long filmeId;

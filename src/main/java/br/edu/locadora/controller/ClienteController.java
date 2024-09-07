@@ -20,9 +20,6 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<ClienteDTO> create(@RequestBody ClienteDTO clienteDTO) {
         ClienteDTO createdCliente = clienteService.save(clienteDTO);
-        
-        System.out.println("Entrou");
-        
         return ResponseEntity.ok(createdCliente);
     }
 
@@ -32,8 +29,10 @@ public class ClienteController {
         Optional<ClienteDTO> clienteDTO = clienteService.findById(id);
         return clienteDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    
     @GetMapping("/nome/{nome}")
     public ResponseEntity<ClienteDTO> findByNome(@PathVariable String nome) {
+    	//System.out.println(nome);
         Optional<ClienteDTO> clienteDTO = clienteService.findByNome(nome);
         return clienteDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }

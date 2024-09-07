@@ -3,6 +3,7 @@ package br.edu.locadora.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+
 @RedisHash("Cliente")//A forma pela qual será referenciado pelo hash
 public class Cliente {
 

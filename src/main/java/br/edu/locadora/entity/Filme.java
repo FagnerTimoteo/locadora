@@ -1,16 +1,18 @@
 package br.edu.locadora.entity;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 @RedisHash("Filme")
 public class Filme {
+	
+	@Id
     private Long id;
 	private String titulo;
     private String genero;
     private boolean disponivel;
     
     public Filme(Long id, String titulo, String genero, boolean disponivel) {
-		super();
 		this.id = id;
 		this.titulo = titulo;
 		this.genero = genero;

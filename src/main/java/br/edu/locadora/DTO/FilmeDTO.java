@@ -7,7 +7,6 @@ public class FilmeDTO {
     private boolean disponivel;
 	
     public FilmeDTO(Long id, String titulo, String genero, boolean disponivel) {
-		super();
 		this.id = id;
 		this.titulo = titulo;
 		this.genero = genero;
