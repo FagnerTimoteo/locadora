@@ -1,13 +1,20 @@
 package br.edu.locadora.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.locadora.DTO.ClienteDTO;
 import br.edu.locadora.service.ClienteService;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
@@ -32,7 +39,6 @@ public class ClienteController {
     
     @GetMapping("/nome/{nome}")
     public ResponseEntity<ClienteDTO> findByNome(@PathVariable String nome) {
-    	//System.out.println(nome);
         Optional<ClienteDTO> clienteDTO = clienteService.findByNome(nome);
         return clienteDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -43,8 +49,8 @@ public class ClienteController {
     	//Por ser um Optional, != null não funciona
     	if (clienteService.findById(id).isPresent()) {
     		clienteDTO.setId(id);
-    		ClienteDTO updatedCliente = clienteService.save(clienteDTO);
-    		
+    		ClienteDTO updatedCliente = clienteService.update(clienteDTO);
+
     		return ResponseEntity.ok(updatedCliente);
         } else {
             return ResponseEntity.notFound().build();

@@ -1,7 +1,5 @@
 package br.edu.locadora.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,6 +39,7 @@ public class LocacaoController {
         }
     }
     
+    /*
     @GetMapping("/filme/{filmeId}")
     public ResponseEntity<List<LocacaoDTO>> getByFilmeId(@PathVariable Long filmeId) {
         List<LocacaoDTO> locacoes = locacaoService.findByFilmeId(filmeId);
@@ -58,6 +57,7 @@ public class LocacaoController {
         List<LocacaoDTO> locacoes = locacaoService.findAll();
         return ResponseEntity.ok(locacoes);
     }
+    */
     
     // Update
     @PutMapping("/{id}")
@@ -66,7 +66,7 @@ public class LocacaoController {
 
         if (existingLocacao != null) {  // Verifica se a locação foi encontrada
             locacaoDTO.setId(id);  // Define o ID da locação a ser atualizada
-            LocacaoDTO updatedLocacao = locacaoService.save(locacaoDTO);  // Salva a locação atualizada
+            LocacaoDTO updatedLocacao = locacaoService.update(locacaoDTO);  // Salva a locação atualizada
             
             return ResponseEntity.ok(updatedLocacao);  // Retorna a locação atualizada com status 200 (OK)
         } else {

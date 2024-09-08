@@ -10,8 +10,6 @@ public class LocacaoDTO {
     private LocalDate dataDevolucao;
     private Double valor;
 
-    // Construtores
-
     public LocacaoDTO() {
     }
 
@@ -23,8 +21,6 @@ public class LocacaoDTO {
         this.dataDevolucao = dataDevolucao;
         this.valor = valor;
     }
-
-    // Getters e Setters
 
     public Long getId() {
         return id;

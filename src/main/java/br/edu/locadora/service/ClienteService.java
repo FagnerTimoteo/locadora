@@ -3,19 +3,18 @@ package br.edu.locadora.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import br.edu.locadora.DAO.ClienteDAO;
 import br.edu.locadora.DTO.ClienteDTO;
 import br.edu.locadora.entity.Cliente;
-import br.edu.locadora.repository.ClienteRepository;
-
-import org.springframework.data.redis.core.RedisTemplate;
 
 @Service
 public class ClienteService {
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClienteDAO clienteDAO;
     
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -25,37 +24,34 @@ public class ClienteService {
         return redisTemplate.opsForValue().increment("cliente:id");
     }
 
-    // Método para salvar um cliente no banco de dados
     public ClienteDTO save(ClienteDTO clienteDTO) {
-        Long id = generateId();
-
-        // Instancia um cliente com os valores passados para o DTO
+        Long id = generateId();//Obtem o id gerado em ordem
+        //Cria o cliente com os parametros passados
         Cliente cliente = new Cliente(id, clienteDTO.getNome(), clienteDTO.getEmail());
-
-        // Salva esse cliente no banco de dados
-        cliente = clienteRepository.save(cliente);
-
-        // Retorna um DTO com os exatos valores do cliente salvo
+        // Salva o cliente no DAO que por sua vez salva-o no Redis
+        cliente = clienteDAO.save(cliente);       
+        // Retornar DTO com valores do cliente salvo
         return new ClienteDTO(cliente.getId(), cliente.getNome(), cliente.getEmail());
     }
-
-    // Método para encontrar cliente pelo ID
+    
     public Optional<ClienteDTO> findById(Long id) {
-        // Acha o cliente no repositório pela ID
-        Optional<Cliente> cliente = clienteRepository.findById(id);
-
-        // Mapeia o cliente para um DTO e retorna
+        Optional<Cliente> cliente = clienteDAO.findById(id);
         return cliente.map(c -> new ClienteDTO(c.getId(), c.getNome(), c.getEmail()));
     }
 
-    // Método para encontrar cliente pelo nome
     public Optional<ClienteDTO> findByNome(String nome) {
-        Optional<Cliente> cliente = clienteRepository.findByNome(nome);
+    	Optional<Cliente> cliente = clienteDAO.findByNome(nome);
         return cliente.map(c -> new ClienteDTO(c.getId(), c.getNome(), c.getEmail()));
+        
+    }
+    
+    public ClienteDTO update(ClienteDTO clienteDTO) {
+    	Cliente cliente = new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail());
+       	Cliente updatedCliente = clienteDAO.update(clienteDTO.getId(), cliente);
+        return new ClienteDTO(updatedCliente.getId(), updatedCliente.getNome(), updatedCliente.getEmail());
     }
 
-    // Método para deletar cliente pelo ID
     public void deleteById(Long id) {
-        clienteRepository.deleteById(id);
+        clienteDAO.deleteById(id);
     }
 }
