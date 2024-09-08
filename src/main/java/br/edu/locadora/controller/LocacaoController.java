@@ -1,6 +1,8 @@
 package br.edu.locadora.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ public class LocacaoController {
     
     // Create
     @PostMapping
+    @CacheEvict(value="locacoes", allEntries = true)
     public ResponseEntity<LocacaoDTO> create(@RequestBody LocacaoDTO locacaoDTO) {
         LocacaoDTO novaLocacao = locacaoService.save(locacaoDTO);
         return ResponseEntity.ok(novaLocacao);
@@ -30,6 +33,7 @@ public class LocacaoController {
     
     // Read
     @GetMapping("/{id}")
+    @Cacheable(value="locacoes")
     public ResponseEntity<LocacaoDTO> findById(@PathVariable Long id) {
         LocacaoDTO locacao = locacaoService.findById(id);
         if (locacao != null) {
@@ -61,6 +65,7 @@ public class LocacaoController {
     
     // Update
     @PutMapping("/{id}")
+    @CacheEvict(value="locacoes", allEntries = true)
     public ResponseEntity<LocacaoDTO> update(@PathVariable Long id, @RequestBody LocacaoDTO locacaoDTO) {
         LocacaoDTO existingLocacao = locacaoService.findById(id);  // Obtém a locação existente
 
@@ -76,6 +81,7 @@ public class LocacaoController {
     
     // Delete
     @DeleteMapping("/{id}")
+    @CacheEvict(value="locacoes", allEntries = true)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         locacaoService.delete(id);
         return ResponseEntity.noContent().build();
