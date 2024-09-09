@@ -3,12 +3,14 @@ package br.edu.locadora.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import br.edu.locadora.DTO.LocacaoDTO;
+import br.edu.locadora.entity.Locacao;
 import br.edu.locadora.DAO.LocacaoDAO;
-import br.edu.locadora.relationship.Locacao;
 
 @Service
 public class LocacaoService {
@@ -24,6 +26,7 @@ public class LocacaoService {
     }
     
     // Salva uma locação
+    @CacheEvict(value="locacoes", allEntries = true)
     public LocacaoDTO save(LocacaoDTO locacaoDTO) {
         Long id = generateId();
         Locacao locacao = new Locacao(
@@ -39,38 +42,14 @@ public class LocacaoService {
     }
     
     // Busca uma locação por ID
+    @Cacheable(value="locacoes")
     public LocacaoDTO findById(Long id) {
         Optional<Locacao> locacao = locacaoDAO.findById(id);
         return locacao.map(this::convertToDTO).orElse(null);
     }
     
-    /*
-    // Retorna todas as locações como DTOs
-    public List<LocacaoDTO> findAll() {
-        return locacaoDAO.findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    
-    // Busca locações por ID do filme
-    public List<LocacaoDTO> findByFilmeId(Long filmeId) {
-        return locacaoDAO.findByFilmeId(filmeId)
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-	
-
-    // Busca locações por ID do cliente
-    public List<LocacaoDTO> findByClienteId(Long clienteId) {
-        return locacaoDAO.findByClienteId(clienteId)
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    */
+    // Atualiza uma locação
+    @CacheEvict(value="locacoes", allEntries = true)
     public LocacaoDTO update(LocacaoDTO locacaoDTO) {
         Locacao locacao = new Locacao(
                 locacaoDTO.getId(),
@@ -85,6 +64,7 @@ public class LocacaoService {
     }
 
     // Deleta uma locação por ID
+    @CacheEvict(value="locacoes", allEntries = true)
     public void delete(Long id) {
         locacaoDAO.deleteById(id);
     }

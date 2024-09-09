@@ -19,23 +19,23 @@ public class FilmeDAOImpl implements FilmeDAO {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    private static final String FILME_TITULO = "titulo:";
 
     @Override
     public Filme save(Filme filme) {
         Filme savedFilme = filmeRepository.save(filme);
-        redisTemplate.opsForValue().set("titulo:" + savedFilme.getTitulo(), savedFilme.getId());
+        redisTemplate.opsForValue().set(FILME_TITULO + savedFilme.getTitulo(), savedFilme.getId());
         return savedFilme;
     }
 
     @Override
     public Optional<Filme> findById(Long id) {
-        // Busca o filme no repositório
         return filmeRepository.findById(id);
     }
 
     @Override
     public Optional<Filme> findByTitulo(String titulo) {
-        String Id = (String) redisTemplate.opsForValue().get("titulo:" + titulo);
+        String Id = (String) redisTemplate.opsForValue().get(FILME_TITULO + titulo);
         if (Id != null) {
             return filmeRepository.findById(Long.valueOf(Id));
         }
@@ -46,7 +46,7 @@ public class FilmeDAOImpl implements FilmeDAO {
     public Filme update(Long id, Filme filme) {
         if (filmeRepository.existsById(id)) {
             Filme updatedFilme = filmeRepository.save(filme);
-            redisTemplate.opsForValue().set("titulo:" + updatedFilme.getTitulo(), updatedFilme.getId());
+            redisTemplate.opsForValue().set(FILME_TITULO + updatedFilme.getTitulo(), updatedFilme.getId());
             return updatedFilme;
         }else {
         	return null;

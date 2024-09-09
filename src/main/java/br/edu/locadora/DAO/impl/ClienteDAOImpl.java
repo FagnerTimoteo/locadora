@@ -19,7 +19,8 @@ public class ClienteDAOImpl implements ClienteDAO {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    private static final String CLIENTE_TITULO_KEY = "titulo:";
+    private static final String CLIENTE_NOME = "nome:";
+    //private static final String CLIENTE_NOME = "titulo:";
 
     @Override
     public Cliente save(Cliente cliente) {
@@ -27,7 +28,7 @@ public class ClienteDAOImpl implements ClienteDAO {
         Cliente savedCliente = clienteRepository.save(cliente);
 
         // Atualiza o cache Redis
-        redisTemplate.opsForValue().set(CLIENTE_TITULO_KEY + savedCliente.getNome(), savedCliente.getId());
+        redisTemplate.opsForValue().set(CLIENTE_NOME + savedCliente.getNome(), savedCliente.getId());
 
         return savedCliente;
     }
@@ -41,7 +42,7 @@ public class ClienteDAOImpl implements ClienteDAO {
     @Override
     public Optional<Cliente> findByNome(String nome) {
         // Busca o ID associado ao nome no Redis
-        String clienteId = (String) redisTemplate.opsForValue().get(CLIENTE_TITULO_KEY + nome);
+        String clienteId = (String) redisTemplate.opsForValue().get(CLIENTE_NOME + nome);
 
         if (clienteId != null) {
             // Se o ID foi encontrado, busca o cliente pelo ID
@@ -58,7 +59,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             Cliente updatedCliente = clienteRepository.save(cliente);
 
             // Atualiza o cache Redis
-            redisTemplate.opsForValue().set(CLIENTE_TITULO_KEY + updatedCliente.getNome(), updatedCliente.getId());
+            redisTemplate.opsForValue().set(CLIENTE_NOME + updatedCliente.getNome(), updatedCliente.getId());
 
             return updatedCliente;
         } else {
@@ -73,7 +74,7 @@ public class ClienteDAOImpl implements ClienteDAO {
         clienteRepository.deleteById(id);
 
         // Remove o nome do cache Redis
-        redisTemplate.opsForValue().getOperations().delete(CLIENTE_TITULO_KEY + id);
+        redisTemplate.opsForValue().getOperations().delete(CLIENTE_NOME + id);
     }
 }
 

@@ -1,4 +1,4 @@
-package br.edu.locadora.relationship;
+package br.edu.locadora.entity;
 
 import java.time.LocalDate;
 
@@ -24,8 +24,7 @@ public class Locacao {
         this.dataDevolucao = dataDevolucao;
         this.valor = valor;
 	}
-
-	// Getters e Setters
+    
     public Long getId() {
         return id;
     }

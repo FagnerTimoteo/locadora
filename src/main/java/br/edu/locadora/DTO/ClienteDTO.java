@@ -1,9 +1,16 @@
 package br.edu.locadora.DTO;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class ClienteDTO {
 
     private Long id;
+    
+    @NotBlank(message="O nome é obrigatório.")
     private String nome;
+    
+    @Email(message="O email é obrigatório.")
     private String email;
 
     // Construtores

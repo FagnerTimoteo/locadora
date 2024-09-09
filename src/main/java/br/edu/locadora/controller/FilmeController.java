@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.locadora.DTO.FilmeDTO;
 import br.edu.locadora.service.FilmeService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/filmes")
@@ -28,7 +29,7 @@ public class FilmeController {
     // Create
     @PostMapping
     @CacheEvict(value="filmes", allEntries = true)
-    public ResponseEntity<FilmeDTO> create(@RequestBody FilmeDTO filmeDTO) {
+    public ResponseEntity<FilmeDTO> create(@Valid @RequestBody FilmeDTO filmeDTO) {
         FilmeDTO createdFilme = filmeService.save(filmeDTO);
         return ResponseEntity.ok(createdFilme);
     }
@@ -50,7 +51,7 @@ public class FilmeController {
     // Update
     @PutMapping("/{id}")
     @CacheEvict(value="filmes", allEntries = true)
-    public ResponseEntity<FilmeDTO> update(@PathVariable Long id, @RequestBody FilmeDTO filmeDTO) {
+    public ResponseEntity<FilmeDTO> update(@Valid  @PathVariable Long id, @RequestBody FilmeDTO filmeDTO) {
         if (filmeService.findById(id).isPresent()) {
             filmeDTO.setId(id);
             FilmeDTO updatedFilme = filmeService.update(filmeDTO);

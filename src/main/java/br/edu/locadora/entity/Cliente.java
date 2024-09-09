@@ -9,11 +9,9 @@ public class Cliente {
 
     @Id
     private Long id;
+    
     private String nome;
     private String email;
-
-    // Construtores
-    public Cliente() {}
 
     public Cliente(Long id, String nome, String email) {
         this.id = id;
@@ -21,7 +19,6 @@ public class Cliente {
         this.email = email;
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

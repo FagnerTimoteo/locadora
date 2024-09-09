@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.locadora.DTO.ClienteDTO;
 import br.edu.locadora.service.ClienteService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/clientes")
@@ -28,7 +29,7 @@ public class ClienteController {
     // Create
     @PostMapping
     @CacheEvict(value="clientes", allEntries = true)
-    public ResponseEntity<ClienteDTO> create(@RequestBody ClienteDTO clienteDTO) {
+    public ResponseEntity<ClienteDTO> create(@Valid @RequestBody ClienteDTO clienteDTO) {
         ClienteDTO createdCliente = clienteService.save(clienteDTO);
         return ResponseEntity.ok(createdCliente);
     }
@@ -51,14 +52,16 @@ public class ClienteController {
     //Update
     @PutMapping("/{id}")
     @CacheEvict(value="clientes", allEntries = true)
-    public ResponseEntity<ClienteDTO> update(@PathVariable Long id, @RequestBody ClienteDTO clienteDTO){
+    public ResponseEntity<ClienteDTO> update(@Valid @PathVariable Long id, @RequestBody ClienteDTO clienteDTO){
     	//Por ser um Optional, != null não funciona
-    	if (clienteService.findById(id).isPresent()) {
-    		clienteDTO.setId(id);
-    		ClienteDTO updatedCliente = clienteService.update(clienteDTO);
+    	if (clienteService.findById(id).isPresent()) {// Verifica se o cliente foi encontrado
+    		clienteDTO.setId(id);// Define o ID da cliente o ser atualizado
+    		ClienteDTO updatedCliente = clienteService.update(clienteDTO);// Salva o cliente atualizado
 
+    		// Retorna o cliente atualizado com status 200 OK
     		return ResponseEntity.ok(updatedCliente);
         } else {
+        	// Retorna 404 se ele não for encontrado
             return ResponseEntity.notFound().build();
         }
     }

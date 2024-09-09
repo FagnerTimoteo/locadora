@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.locadora.DTO.LocacaoDTO;
 import br.edu.locadora.service.LocacaoService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/locacoes")
@@ -26,7 +27,7 @@ public class LocacaoController {
     // Create
     @PostMapping
     @CacheEvict(value="locacoes", allEntries = true)
-    public ResponseEntity<LocacaoDTO> create(@RequestBody LocacaoDTO locacaoDTO) {
+    public ResponseEntity<LocacaoDTO> create(@Valid @RequestBody LocacaoDTO locacaoDTO) {
         LocacaoDTO novaLocacao = locacaoService.save(locacaoDTO);
         return ResponseEntity.ok(novaLocacao);
     }
@@ -43,39 +44,19 @@ public class LocacaoController {
         }
     }
     
-    /*
-    @GetMapping("/filme/{filmeId}")
-    public ResponseEntity<List<LocacaoDTO>> getByFilmeId(@PathVariable Long filmeId) {
-        List<LocacaoDTO> locacoes = locacaoService.findByFilmeId(filmeId);
-        return ResponseEntity.ok(locacoes);
-    }
-    
-    @GetMapping("/cliente/{clienteId}")
-    public ResponseEntity<List<LocacaoDTO>> getByClienteId(@PathVariable Long clienteId) {
-        List<LocacaoDTO> locacoes = locacaoService.findByClienteId(clienteId);
-        return ResponseEntity.ok(locacoes);
-    }
-    
-    @GetMapping
-    public ResponseEntity<List<LocacaoDTO>> findAll() {
-        List<LocacaoDTO> locacoes = locacaoService.findAll();
-        return ResponseEntity.ok(locacoes);
-    }
-    */
-    
     // Update
     @PutMapping("/{id}")
     @CacheEvict(value="locacoes", allEntries = true)
-    public ResponseEntity<LocacaoDTO> update(@PathVariable Long id, @RequestBody LocacaoDTO locacaoDTO) {
-        LocacaoDTO existingLocacao = locacaoService.findById(id);  // Obtém a locação existente
+    public ResponseEntity<LocacaoDTO> update(@Valid @PathVariable Long id, @RequestBody LocacaoDTO locacaoDTO) {
+        LocacaoDTO existingLocacao = locacaoService.findById(id);
 
-        if (existingLocacao != null) {  // Verifica se a locação foi encontrada
-            locacaoDTO.setId(id);  // Define o ID da locação a ser atualizada
-            LocacaoDTO updatedLocacao = locacaoService.update(locacaoDTO);  // Salva a locação atualizada
+        if (existingLocacao != null) {
+            locacaoDTO.setId(id);
+            LocacaoDTO updatedLocacao = locacaoService.update(locacaoDTO);
             
-            return ResponseEntity.ok(updatedLocacao);  // Retorna a locação atualizada com status 200 (OK)
+            return ResponseEntity.ok(updatedLocacao);
         } else {
-            return ResponseEntity.notFound().build();  // Retorna 404 se a locação não for encontrada
+            return ResponseEntity.notFound().build();
         }
     }
     

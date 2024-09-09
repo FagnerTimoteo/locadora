@@ -1,9 +1,17 @@
 package br.edu.locadora.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class FilmeDTO {
 	private Long id;
+	
+	@NotBlank(message="O título é obrigatório.")
 	private String titulo;
+	
+	@NotBlank(message="O gênero é obrigatório.")
     private String genero;
+	
+	
     private boolean disponivel;
 	
     public FilmeDTO(Long id, String titulo, String genero, boolean disponivel) {

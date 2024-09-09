@@ -17,7 +17,7 @@ public class RedisConfig {
 
 	    // Definir serializadores para chave e valor
 	    template.setKeySerializer(new StringRedisSerializer());  // Para chaves String
-	    template.setValueSerializer(new GenericToStringSerializer<>(Object.class));  // Para valores do tipo Filme
+	    template.setValueSerializer(new GenericToStringSerializer<>(Object.class));  // Para valores do tipo Object
 
 	    return template;
 	}

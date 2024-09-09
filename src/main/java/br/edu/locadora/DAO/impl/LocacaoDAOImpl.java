@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.edu.locadora.DAO.LocacaoDAO;
-import br.edu.locadora.relationship.Locacao;
+import br.edu.locadora.entity.Locacao;
 
 @Component
 public class LocacaoDAOImpl implements LocacaoDAO {

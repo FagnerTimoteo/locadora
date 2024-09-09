@@ -2,7 +2,7 @@ package br.edu.locadora.DAO;
 
 import java.util.Optional;
 
-import br.edu.locadora.relationship.Locacao;
+import br.edu.locadora.entity.Locacao;
 
 public interface LocacaoDAO {
     Locacao save(Locacao locacao);
